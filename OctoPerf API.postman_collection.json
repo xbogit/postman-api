@@ -1,0 +1,594 @@
+{
+	"info": {
+		"_postman_id": "32532d55-1a3c-4450-bdca-89a294e42083",
+		"name": "OctoPerf API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login and get user token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "085c5ba1-a4ba-48b0-bb5d-16f82a5a3560",
+						"exec": [
+							"//Extra token from response body and sets as a variable\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\",jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/public/users/login?username=u14man@gmail.com&password=Xbo1234!",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"public",
+						"users",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "u14man@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "Xbo1234!"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6bd29355-6a0d-4fc5-abaa-fb7f25bc7859",
+						"exec": [
+							"//Check Status code is 200\r",
+							"pm.test(\"Status code is 200\", function () { \r",
+							"  pm.response.to.have.status(200); \r",
+							"}); \r",
+							"\r",
+							"//Check that user address is correct \r",
+							"pm.test(\"Check that user address is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.info.address).to.eql(\"HAIDAN, BeiJing\");\r",
+							"});\r",
+							"\r",
+							"//Check that user company is correct \r",
+							"pm.test(\"Check that user company is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.info.company).to.eql(\"XBO\");\r",
+							"});\r",
+							"\r",
+							"//Check that user country is correct \r",
+							"pm.test(\"Check that user country is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.info.country).to.eql(\"CN\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Check that user firstname is correct \r",
+							"pm.test(\"Check that user firstname is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.info.firstname).to.eql(\"Jorry\");\r",
+							"});\r",
+							"\r",
+							"//Check that user lastname is correct \r",
+							"pm.test(\"Check that user lastname is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.info.lastname).to.eql(\"Zhao\");\r",
+							"});\r",
+							"\r",
+							"//Check that user phone is correct \r",
+							"pm.test(\"Check that user phone is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.info.phone).to.eql(\"4375375616\");\r",
+							"});\r",
+							"\r",
+							"//Check that username is correct \r",
+							"pm.test(\"Check that username is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.username).to.eql(\"u14man@gmail.com\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//Extra user id from response body and sets as a variable\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"usr_id\",jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/users/current",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"users",
+						"current"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Workspace",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3698a71-f1d9-480e-a864-6bf5c26c0f01",
+						"exec": [
+							"//Successful POST request\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+							"});\r",
+							"\r",
+							"//Check that workspace name is correct \r",
+							"pm.test(\"Check that user address is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.name).to.eql(\"apiCreatedWorkspace\");\r",
+							"});\r",
+							"\r",
+							"//Check that workspace description is correct \r",
+							"pm.test(\"Check that user address is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.description).to.eql(\"Default Description\");\r",
+							"});\r",
+							"\r",
+							"//Extra workspace id from response body and sets as a variable\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"ws_id\",jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"created\": \"2019-03-27T06:35:18.009Z\",\r\n  \"description\": \"Default Description\",\r\n  \"id\": \"\",\r\n  \"lastModified\": \"2019-03-27T06:50:18.009Z\",\r\n  \"name\": \"apiCreatedWorkspace-Postman\",\r\n  \"userId\": \"{{usr_id}}}\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/workspaces",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"workspaces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Workspace",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3698a71-f1d9-480e-a864-6bf5c26c0f01",
+						"exec": [
+							"//Check Status code is 200\r",
+							"pm.test(\"Status code is 200\", function () { \r",
+							"  pm.response.to.have.status(200); \r",
+							"}); \r",
+							"\r",
+							"//Check that workspace description is updated\r",
+							"pm.test(\"Check that user address is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.description).to.eql(\"Changed Description\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"created\": \"2019-03-27T06:35:18.009Z\",\r\n  \"description\": \"Changed Description\",\r\n  \"id\": \"{{ws_id}}\",\r\n  \"lastModified\": \"2019-03-27T08:50:18.009Z\",\r\n  \"name\": \"apiCreatedWorkspace\",\r\n  \"userId\": \"{{usr_id}}}\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/workspaces/{{ws_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"workspaces",
+						"{{ws_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3698a71-f1d9-480e-a864-6bf5c26c0f01",
+						"exec": [
+							"//Successful POST request\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+							"});\r",
+							"\r",
+							"//Check that workspace name is correct \r",
+							"pm.test(\"Check that user address is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.name).to.eql(\"apiCreatedProject\");\r",
+							"});\r",
+							"\r",
+							"//Check that workspace description is correct \r",
+							"pm.test(\"Check that user address is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.description).to.eql(\"Default Description\");\r",
+							"});\r",
+							"\r",
+							"//Extra workspace id from response body and sets as a variable\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"pro_id\",jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"created\": \"2019-03-27T06:35:18.009Z\",\r\n  \"description\": \"Default Description\",\r\n  \"id\": \"\",\r\n  \"lastModified\": \"2019-03-27T06:50:18.009Z\",\r\n  \"name\": \"apiCreatedProject-Postman\",\r\n  \"type\": \"DESIGN\",\r\n  \"userId\": \"{{usr_id}}}\",\r\n  \"workspaceId\": \"{{ws_id}}\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/design/projects/",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"design",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3698a71-f1d9-480e-a864-6bf5c26c0f01",
+						"exec": [
+							"//Successful Delete request\r",
+							"pm.test(\"Status code is 204\", function () { \r",
+							"  pm.response.to.have.status(204); \r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"created\": \"2019-03-27T06:35:18.009Z\",\r\n  \"description\": \"Default Description\",\r\n  \"id\": \"\",\r\n  \"lastModified\": \"2019-03-27T06:50:18.009Z\",\r\n  \"name\": \"apiCreatedProject\",\r\n  \"type\": \"DESIGN\",\r\n  \"userId\": \"{{usr_id}}}\",\r\n  \"workspaceId\": \"{{ws_id}}\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/design/projects/{{pro_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"design",
+						"projects",
+						"{{pro_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check project is deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6bd29355-6a0d-4fc5-abaa-fb7f25bc7859",
+						"exec": [
+							"//Check Status code is 404",
+							"pm.test(\"Status code is 404\", function () { ",
+							"  pm.response.to.have.status(404);",
+							"}); ",
+							"",
+							"//Check error message shows that contract is not found",
+							"pm.test(\"Error messages returns\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"The requested Item has not been found\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/design/projects/{{pro_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"design",
+						"projects",
+						"{{pro_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Workspace",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3698a71-f1d9-480e-a864-6bf5c26c0f01",
+						"exec": [
+							"//Successful Delete request\r",
+							"pm.test(\"Status code is 204\", function () { \r",
+							"  pm.response.to.have.status(204); \r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"created\": \"2019-03-27T06:35:18.009Z\",\r\n  \"description\": \"Default Description\",\r\n  \"id\": \"\",\r\n  \"lastModified\": \"2019-03-27T06:50:18.009Z\",\r\n  \"name\": \"apiCreatedWorkspace\",\r\n  \"userId\": \"{{usr_id}}}\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/workspaces/{{ws_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"workspaces",
+						"{{ws_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check workspace is deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6bd29355-6a0d-4fc5-abaa-fb7f25bc7859",
+						"exec": [
+							"//Check Status code is 404",
+							"pm.test(\"Status code is 404\", function () { ",
+							"  pm.response.to.have.status(404);",
+							"}); ",
+							"",
+							"//Check error message shows that contract is not found",
+							"pm.test(\"Error messages returns\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"The requested Item has not been found\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.octoperf.com/workspaces/{{ws_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"octoperf",
+						"com"
+					],
+					"path": [
+						"workspaces",
+						"{{ws_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
